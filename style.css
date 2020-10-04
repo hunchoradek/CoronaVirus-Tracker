@@ -1,0 +1,50 @@
+body * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+.content {
+    width: 80%;
+    margin: auto;
+}
+canvas {
+    width: 400px;
+    height: 400px;
+}
+
+.corona {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#cases {
+    background-color: #8b0000;
+    font-weight: bold;
+    border: 1px solid #222222;
+    padding: 1em;
+    border-radius: 1em;
+    flex-basis: 30%;
+    text-align: center;
+    color: whitesmoke
+}
+
+#deaths {
+    background-color: #696969;
+    font-weight: bold;
+    border: 1px solid #222222;
+    padding: 1em;
+    border-radius: 1em;
+    flex-basis: 30%;
+    text-align: center;
+}
+
+#recovered {
+    background-color: #32cd32;
+    font-weight: bold;
+    border: 1px solid #222222;
+    padding: 1em;
+    border-radius: 1em;
+    flex-basis: 30%;
+    text-align: center;
+}

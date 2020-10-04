@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Corona Tracker for Poland</title>
+</head>
+<body>
+    <div class="content">
+    <section class="corona">
+        <p id="cases">
+
+        </p>
+        <p id="deaths">
+
+        </p>
+        <p id="recovered">
+
+        </p>
+    </section>
+    <canvas id="myChart"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
+    <script>
+        fetch(`https://covid19-api.org/api/timeline/pl`)
+            .then(res => res.json())
+            .then(data => {
+            var cases = []
+            var labels = []
+            var deaths = []
+            var recovered = []
+            var daily = []
+            let n = 0;
+            console.log(data);
+            data.forEach(element => {
+                cases.unshift(data[n].cases);
+                let masno = data[n].last_update;
+                let update = masno.replace("T", " ")
+                labels.unshift(update)
+                deaths.unshift(data[n].deaths)
+                recovered.unshift(data[n].recovered)
+                if (n > 0) {
+                    daily.unshift(data[n-1].cases - data[n].cases);
+                }
+                else {
+                    daily.unshift(data[n].cases);
+                }
+                n++;
+            });
+            var resultCases = document.getElementById("cases");
+            var resultDeaths = document.getElementById("deaths");
+            var resultRecovered = document.getElementById("recovered");
+            daily.pop();
+            
+            resultCases.innerHTML = `Potwierdzonych przypadków łącznie: ${cases[n-1]} (dzisiaj: ${cases[n-1] - cases[n-2]})`;
+            resultDeaths.innerHTML = `Potwierdzonych zgonów łącznie: ${deaths[n-1]} (dzisiaj: ${deaths[n-1] - deaths[n-2]})`;
+            resultRecovered.innerHTML = `Potwierdzonych wyleczonych przypadków łącznie: ${recovered[n-1]} (dzisiaj: ${recovered[n-1] - recovered[n-2]})`;
+
+            var myChart = document.getElementById("myChart").getContext('2d')
+
+            var chart = new Chart(myChart, {
+                type:'line',
+                data:{
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Potwierdzone przypadki",
+                            data: cases,
+                            backgroundColor: '#8b0000',
+                            minBarLength: 100
+                        },
+
+                        {
+                            label: "Liczba zgonów",
+                            data: deaths,
+                            backgroundColor: '#696969',
+                            minBarLength: 100
+                        },
+                        
+                        {
+                            label: "Wyleczone przypadki",
+                            data: recovered,
+                            backgroundColor: '#32cd32',
+                            minBarLength: 100
+                        },
+
+                        {
+                            label: "Dzienna liczba przypadków",
+                            data: daily,
+                            backgroundColor: '#7188e6',
+                            minBarLength: 100
+                        }
+                    ]
+                },
+                options:{}
+            })
+        });
+    </script>
+</body>
+</html>
